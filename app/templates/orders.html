@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Orders | E-commerce Demo{% endblock %}
+
+{% block content %}
+    <h1>Orders</h1>
+    <h2>Place a demo order</h2>
+    {% if products %}
+        <form method="post" action="{{ url_for('orders.index') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <label for="product_id">Product</label>
+            <select id="product_id" name="product_id" required>
+                {% for product in products %}
+                    <option value="{{ product[0] }}">
+                        {{ product[1] }} ({{ product[2] }}) - ${{ "%.2f"|format(product[3]) }}
+                    </option>
+                {% endfor %}
+            </select>
+            <label for="quantity">Quantity</label>
+            <input id="quantity" name="quantity" type="number" min="1" step="1" value="1" required>
+            <button type="submit">Place order</button>
+        </form>
+    {% else %}
+        <p>No active products are available to order.</p>
+    {% endif %}
+
+    <h2>Your order history</h2>
+    {% if orders %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Order</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Unit price</th>
+                    <th>Line total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ order[0] }}</td>
+                        <td>{{ order[1] }}</td>
+                        <td>{{ order[2] }}</td>
+                        <td>{{ order[3] }}</td>
+                        <td>{{ order[4] }}</td>
+                        <td>${{ "%.2f"|format(order[5]) }}</td>
+                        <td>${{ "%.2f"|format(order[4] * order[5]) }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>You have not placed any orders yet.</p>
+    {% endif %}
+{% endblock %}

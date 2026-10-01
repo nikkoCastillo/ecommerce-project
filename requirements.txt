@@ -1,0 +1,6 @@
+Flask
+Flask-Login
+Flask-WTF
+python-dotenv
+pyodbc
+pandas

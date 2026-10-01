@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Products | E-commerce Demo{% endblock %}
+
+{% block content %}
+    <h1>Active products</h1>
+    {% if products %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    {% if current_user.is_admin %}
+                        <th>Actions</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                    <tr>
+                        <td>{{ product[1] }}</td>
+                        <td>{{ product[2] }}</td>
+                        <td>{{ "%.2f"|format(product[3]) }}</td>
+
+                        {% if current_user.is_admin %}
+                            <td>
+                                <a href="{{ url_for('products.edit_product', product_id=product[0]) }}">
+                                    Edit
+                                </a>
+
+                                <form method="post"
+                                    action="{{ url_for('products.delete_product', product_id=product[0]) }}">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button type="submit">Deactivate</button>
+                                </form>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No active products found.</p>
+    {% endif %}
+{% endblock %}

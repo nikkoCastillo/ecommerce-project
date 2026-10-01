@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Sales dashboard | E-commerce Demo{% endblock %}
+
+{% block content %}
+    <h1>Monthly sales</h1>
+    <p>Total revenue: ${{ "%.2f"|format(total_revenue) }}</p>
+    <p>Total orders: {{ total_orders }}</p>
+
+    {% if sales %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Month</th>
+                    <th>Orders</th>
+                    <th>Revenue</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in sales %}
+                    <tr>
+                        <td>{{ row["MonthStart"] }}</td>
+                        <td>{{ row["OrderCount"] }}</td>
+                        <td>${{ "%.2f"|format(row["Revenue"]) }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No completed sales are available yet.</p>
+    {% endif %}
+{% endblock %}
